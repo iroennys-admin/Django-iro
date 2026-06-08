@@ -4,15 +4,20 @@
 
 Este es un curso simple de Django creado por **Iroennys Dev**. 🎉
 
+## 🌐 Sitio Web del Curso
+
+Puedes acceder al sitio web del curso aquí: [https://iroennys-admin.github.io/Django-iro/](https://iroennys-admin.github.io/Django-iro/)
+
 ## Descripción
 
-Este repositorio contiene un proyecto básico de Django para aprender los conceptos fundamentales del framework. Ideal para principiantes que desean adentrarse en el mundo del desarrollo web con Python y Django.
+Este repositorio contiene un curso completo de Django para aprender los conceptos fundamentales del framework. Ideal para principiantes que desean adentrarse en el mundo del desarrollo web con Python y Django.
 
 ## Características
 
 - Configuración básica de Django.
 - Estructura de proyecto lista para empezar.
 - Ejemplos simples para entender los conceptos clave.
+- Lecciones detalladas sobre modelos, vistas, plantillas, URLs, administración, formularios y despliegue.
 
 ## Requisitos
 
@@ -48,6 +53,13 @@ Si deseas contribuir a este proyecto, no dudes en hacer un fork y enviar tus pul
 ## Licencia
 
 Este proyecto está bajo la licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+
+---
+
+**Creador:** Iroennys Dev 💻
+**GitHub:** [iroennys-admin](https://github.com/iroennys-admin)
+
+¡Espero que este curso te sea útil! Si tienes dudas, no dudes en contactarme. 😊
 
 ---
 
