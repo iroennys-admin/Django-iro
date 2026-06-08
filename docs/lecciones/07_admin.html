@@ -1,0 +1,207 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Curso de Django - Lección</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="../css/styles.css">
+        <style>
+            .lesson-content {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 2rem;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            .lesson-content h1, .lesson-content h2, .lesson-content h3 {
+                color: #667eea;
+            }
+            .lesson-content a {
+                color: #667eea;
+                text-decoration: none;
+            }
+            .lesson-content a:hover {
+                text-decoration: underline;
+            }
+            .lesson-content pre {
+                background: #f5f5f5;
+                padding: 1rem;
+                border-radius: 4px;
+                overflow-x: auto;
+            }
+            .lesson-content code {
+                background: #f5f5f5;
+                padding: 0.2rem 0.4rem;
+                border-radius: 4px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <img src="https://www.djangoproject.com/m/img/logos/django-logo-negative.png" alt="Django Logo" class="django-logo">
+            <h1>Curso de Django 🚀</h1>
+            <p>Aprende Django desde cero con Iroennys Dev</p>
+        </header>
+        <div class="container">
+            <div class="lesson-content">
+                <h1>Lección 7: Panel de Administración de Django 🛠️</h1>
+<p>En esta lección, aprenderás sobre el panel de administración de Django. El panel de administración es una herramienta integrada que te permite gestionar los datos de tu aplicación de manera sencilla.</p>
+<hr />
+<h2>📌 ¿Qué es el panel de administración?</h2>
+<p>El panel de administración de Django es una interfaz web que te permite gestionar los datos de tu aplicación. Con él, puedes crear, leer, actualizar y eliminar registros de tus modelos sin tener que escribir código adicional.</p>
+<hr />
+<h2>🛠️ Configuración del panel de administración</h2>
+<h3>1. Crear un superusuario</h3>
+<p>Para acceder al panel de administración, necesitas crear un superusuario. Ejecuta el siguiente comando:</p>
+<pre><code class="language-bash">python manage.py createsuperuser
+</code></pre>
+<p>Sigue las instrucciones para crear un superusuario. Recuerda guardar tus credenciales en un lugar seguro.</p>
+<h3>2. Iniciar el servidor de desarrollo</h3>
+<p>Ejecuta el siguiente comando para iniciar el servidor de desarrollo:</p>
+<pre><code class="language-bash">python manage.py runserver
+</code></pre>
+<h3>3. Acceder al panel de administración</h3>
+<p>Abre tu navegador y ve a <a href="http://127.0.0.1:8000/admin/">http://127.0.0.1:8000/admin/</a>. Inicia sesión con las credenciales del superusuario que creaste.</p>
+<hr />
+<h2>📂 Registrar modelos en el panel de administración</h2>
+<h3>1. Registrar un modelo</h3>
+<p>Abre el archivo <code>mi_app/admin.py</code> y registra tu modelo:</p>
+<pre><code class="language-python">from django.contrib import admin
+from .models import Libro
+
+admin.site.register(Libro)
+</code></pre>
+<h3>2. Personalizar el panel de administración</h3>
+<p>Puedes personalizar cómo se muestra tu modelo en el panel de administración creando una clase <code>ModelAdmin</code>:</p>
+<pre><code class="language-python">from django.contrib import admin
+from .models import Libro
+
+class LibroAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'autor', 'fecha_publicacion', 'disponible')
+    list_filter = ('autor', 'disponible')
+    search_fields = ('titulo', 'autor')
+    date_hierarchy = 'fecha_publicacion'
+
+admin.site.register(Libro, LibroAdmin)
+</code></pre>
+<h3>Explicación:</h3>
+<ul>
+<li><strong><code>list_display</code></strong>: Define los campos que se mostrarán en la lista de registros.</li>
+<li><strong><code>list_filter</code></strong>: Define los campos por los que se puede filtrar la lista de registros.</li>
+<li><strong><code>search_fields</code></strong>: Define los campos que se pueden buscar.</li>
+<li><strong><code>date_hierarchy</code></strong>: Define un campo de fecha para navegar por jerarquía.</li>
+</ul>
+<hr />
+<h2>🔍 Personalización avanzada</h2>
+<h3>1. Campos de solo lectura</h3>
+<p>Puedes definir campos de solo lectura en el panel de administración:</p>
+<pre><code class="language-python">class LibroAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'autor', 'fecha_publicacion', 'disponible')
+    readonly_fields = ('fecha_publicacion',)
+
+admin.site.register(Libro, LibroAdmin)
+</code></pre>
+<h3>2. Campos personalizados</h3>
+<p>Puedes definir métodos personalizados para mostrar información adicional en el panel de administración:</p>
+<pre><code class="language-python">class LibroAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'autor', 'fecha_publicacion', 'disponible', 'dias_desde_publicacion')
+
+    def dias_desde_publicacion(self, obj):
+        return (timezone.now() - obj.fecha_publicacion).days
+
+    dias_desde_publicacion.short_description = 'Días desde publicación'
+
+admin.site.register(Libro, LibroAdmin)
+</code></pre>
+<hr />
+<h2>📚 Relaciones en el panel de administración</h2>
+<h3>1. Relación uno a muchos</h3>
+<p>Si tienes un modelo con una relación uno a muchos, puedes personalizar cómo se muestra en el panel de administración:</p>
+<pre><code class="language-python">class AutorAdmin(admin.ModelAdmin):
+    list_display = ('nombre',)
+
+class LibroAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'autor', 'fecha_publicacion', 'disponible')
+
+admin.site.register(Autor, AutorAdmin)
+admin.site.register(Libro, LibroAdmin)
+</code></pre>
+<h3>2. Relación muchos a muchos</h3>
+<p>Si tienes un modelo con una relación muchos a muchos, puedes personalizar cómo se muestra en el panel de administración:</p>
+<pre><code class="language-python">class LibroAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'fecha_publicacion', 'disponible')
+    filter_horizontal = ('autores',)
+
+admin.site.register(Libro, LibroAdmin)
+</code></pre>
+<hr />
+<h2>🎯 Personalizar el sitio de administración</h2>
+<h3>1. Cambiar el título y encabezado</h3>
+<p>Puedes personalizar el título y el encabezado del panel de administración modificando el archivo <code>mi_proyecto/urls.py</code>:</p>
+<pre><code class="language-python">from django.contrib import admin
+from django.urls import path, include
+
+admin.site.site_header = &quot;Administración de Mi Proyecto&quot;
+admin.site.site_title = &quot;Mi Proyecto Admin&quot;
+admin.site.index_title = &quot;Bienvenido al panel de administración&quot;
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('mi_app.urls')),
+]
+</code></pre>
+<h3>2. Cambiar el estilo del panel de administración</h3>
+<p>Puedes personalizar el estilo del panel de administración creando un archivo CSS y cargándolo en tu proyecto. Para ello, sigue estos pasos:</p>
+<ol>
+<li>Crea una carpeta llamada <code>static</code> dentro de tu aplicación <code>mi_app</code>:</li>
+</ol>
+<pre><code class="language-bash">mkdir -p mi_app/static/mi_app/css
+</code></pre>
+<ol>
+<li>Crea un archivo llamado <code>admin.css</code> dentro de <code>mi_app/static/mi_app/css</code>:</li>
+</ol>
+<pre><code class="language-css">/* Estilos personalizados para el panel de administración */
+body {
+    background-color: #f5f5f5;
+}
+
+#header {
+    background-color: #333;
+    color: #fff;
+}
+</code></pre>
+<ol>
+<li>Crea un archivo llamado <code>admin.py</code> dentro de <code>mi_app</code> y define una clase para cargar el CSS:</li>
+</ol>
+<pre><code class="language-python">from django.contrib import admin
+from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
+
+class AdminCSS:
+    def __init__(self):
+        self.css = {
+            'all': ('mi_app/css/admin.css',)
+        }
+
+admin.site.index_template = 'admin/index.html'
+admin.site.login_template = 'admin/login.html'
+</code></pre>
+<hr />
+<h2>🎉 ¡Felicidades!</h2>
+<p>Has aprendido sobre el panel de administración de Django y cómo gestionar tus modelos. En la próxima lección, aprenderás sobre los formularios en Django y cómo manejar la entrada de datos de los usuarios.</p>
+<hr />
+<p><strong>Creador:</strong> Iroennys Dev 💻
+<strong>GitHub:</strong> <a href="https://github.com/iroennys-admin">iroennys-admin</a></p>
+<p>¡Espero que esta lección te haya sido útil! Si tienes dudas, no dudes en contactarme. 😊</p>
+            </div>
+        </div>
+        <footer>
+            <p>Creador: <a href="https://github.com/iroennys-admin" target="_blank">Iroennys Dev</a> | © 2023 Curso de Django</p>
+        </footer>
+    </body>
+    </html>
+    

@@ -1,0 +1,222 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Curso de Django - Lección</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="../css/styles.css">
+        <style>
+            .lesson-content {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 2rem;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            .lesson-content h1, .lesson-content h2, .lesson-content h3 {
+                color: #667eea;
+            }
+            .lesson-content a {
+                color: #667eea;
+                text-decoration: none;
+            }
+            .lesson-content a:hover {
+                text-decoration: underline;
+            }
+            .lesson-content pre {
+                background: #f5f5f5;
+                padding: 1rem;
+                border-radius: 4px;
+                overflow-x: auto;
+            }
+            .lesson-content code {
+                background: #f5f5f5;
+                padding: 0.2rem 0.4rem;
+                border-radius: 4px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <img src="https://www.djangoproject.com/m/img/logos/django-logo-negative.png" alt="Django Logo" class="django-logo">
+            <h1>Curso de Django 🚀</h1>
+            <p>Aprende Django desde cero con Iroennys Dev</p>
+        </header>
+        <div class="container">
+            <div class="lesson-content">
+                <h1>Lección 9: Despliegue de Aplicaciones Django 🚀</h1>
+<p>En esta lección, aprenderás sobre el despliegue de aplicaciones Django. El despliegue es el proceso de llevar tu aplicación desde el entorno de desarrollo a un entorno de producción, donde los usuarios finales pueden acceder a ella.</p>
+<hr />
+<h2>📌 ¿Qué es el despliegue?</h2>
+<p>El despliegue es el proceso de instalar, configurar y ejecutar tu aplicación en un servidor para que esté disponible para los usuarios finales. Esto implica configurar un servidor web, una base de datos, y otros servicios necesarios para que tu aplicación funcione correctamente.</p>
+<hr />
+<h2>🛠️ Preparación para el despliegue</h2>
+<h3>1. Configuración de <code>settings.py</code></h3>
+<p>Antes de desplegar tu aplicación, debes asegurarte de que la configuración de tu proyecto sea adecuada para un entorno de producción. Abre <code>mi_proyecto/settings.py</code> y realiza los siguientes cambios:</p>
+<pre><code class="language-python"># Desactivar el modo de depuración
+DEBUG = False
+
+# Configurar hosts permitidos
+ALLOWED_HOSTS = ['tu-dominio.com', 'tu-ip-del-servidor']
+
+# Configurar la base de datos
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'nombre_de_la_base_de_datos',
+        'USER': 'nombre_de_usuario',
+        'PASSWORD': 'contraseña',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+
+# Configurar archivos estáticos
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+
+# Configurar archivos de medios
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+</code></pre>
+<hr />
+<h2>📂 Despliegue en un servidor</h2>
+<h3>1. Elección del servidor</h3>
+<p>Puedes desplegar tu aplicación en varios tipos de servidores, como:</p>
+<ul>
+<li><strong>Servidores VPS</strong>: DigitalOcean, Linode, Vultr, etc.</li>
+<li><strong>Servidores en la nube</strong>: AWS, Google Cloud, Azure, etc.</li>
+<li><strong>Plataformas de hosting</strong>: PythonAnywhere, Heroku, etc.</li>
+</ul>
+<h3>2. Configuración del servidor</h3>
+<h4>Instalar dependencias</h4>
+<p>Conéctate a tu servidor mediante SSH y ejecuta los siguientes comandos para instalar las dependencias necesarias:</p>
+<pre><code class="language-bash"># Actualizar paquetes
+sudo apt update
+sudo apt upgrade
+
+# Instalar Python y pip
+sudo apt install python3 python3-pip python3-venv
+
+# Instalar un servidor web (Nginx)
+sudo apt install nginx
+
+# Instalar una base de datos (PostgreSQL)
+sudo apt install postgresql postgresql-contrib
+
+# Instalar Git
+sudo apt install git
+</code></pre>
+<h4>Configurar la base de datos</h4>
+<ol>
+<li>Conéctate a PostgreSQL:</li>
+</ol>
+<pre><code class="language-bash">sudo -u postgres psql
+</code></pre>
+<ol>
+<li>Crea una base de datos y un usuario:</li>
+</ol>
+<pre><code class="language-sql">CREATE DATABASE nombre_de_la_base_de_datos;
+CREATE USER nombre_de_usuario WITH PASSWORD 'contraseña';
+GRANT ALL PRIVILEGES ON DATABASE nombre_de_la_base_de_datos TO nombre_de_usuario;
+ALTER ROLE nombre_de_usuario SET client_encoding TO 'utf8';
+ALTER ROLE nombre_de_usuario SET default_transaction_isolation TO 'read committed';
+ALTER ROLE nombre_de_usuario SET timezone TO 'UTC';
+</code></pre>
+<ol>
+<li>Sal de PostgreSQL:</li>
+</ol>
+<p>```sql\q</p>
+<pre><code>
+---
+
+## 🔍 Despliegue con Gunicorn
+
+Gunicorn es un servidor WSGI para Python que puedes usar para ejecutar tu aplicación Django en producción.
+
+### 1. Instalar Gunicorn
+
+Ejecuta el siguiente comando para instalar Gunicorn:
+
+```bash
+pip install gunicorn
+</code></pre>
+<h3>2. Configurar Gunicorn</h3>
+<p>Crea un archivo llamado <code>gunicorn.conf.py</code> en la raíz de tu proyecto:</p>
+<pre><code class="language-python">bind = &quot;0.0.0.0:8000&quot;
+workers = 3
+timeout = 120
+</code></pre>
+<h3>3. Ejecutar Gunicorn</h3>
+<p>Ejecuta el siguiente comando para iniciar Gunicorn:</p>
+<pre><code class="language-bash">gunicorn mi_proyecto.wsgi:application --config gunicorn.conf.py
+</code></pre>
+<hr />
+<h2>📚 Despliegue con Nginx</h2>
+<p>Nginx es un servidor web que puedes usar como proxy inverso para tu aplicación Django.</p>
+<h3>1. Configurar Nginx</h3>
+<p>Crea un archivo de configuración para Nginx en <code>/etc/nginx/sites-available/mi_proyecto</code>:</p>
+<pre><code class="language-nginx">server {
+    listen 80;
+    server_name tu-dominio.com;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /ruta/a/tu/proyecto;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/ruta/a/tu/proyecto/mi_proyecto.sock;
+    }
+}
+</code></pre>
+<h3>2. Habilitar el sitio</h3>
+<p>Ejecuta los siguientes comandos para habilitar el sitio:</p>
+<pre><code class="language-bash">sudo ln -s /etc/nginx/sites-available/mi_proyecto /etc/nginx/sites-enabled
+sudo nginx -t
+sudo systemctl restart nginx
+</code></pre>
+<hr />
+<h2>🎯 Despliegue en Heroku</h2>
+<p>Heroku es una plataforma de hosting que te permite desplegar aplicaciones Django de manera sencilla.</p>
+<h3>1. Instalar el CLI de Heroku</h3>
+<p>Descarga e instala el CLI de Heroku desde <a href="https://devcenter.heroku.com/articles/heroku-cli">heroku.com</a>.</p>
+<h3>2. Crear un archivo <code>Procfile</code></h3>
+<p>Crea un archivo llamado <code>Procfile</code> en la raíz de tu proyecto:</p>
+<pre><code>web: gunicorn mi_proyecto.wsgi --log-file -
+</code></pre>
+<h3>3. Crear un archivo <code>requirements.txt</code></h3>
+<p>Ejecuta el siguiente comando para generar un archivo <code>requirements.txt</code>:</p>
+<pre><code class="language-bash">pip freeze &gt; requirements.txt
+</code></pre>
+<h3>4. Crear un archivo <code>runtime.txt</code></h3>
+<p>Crea un archivo llamado <code>runtime.txt</code> en la raíz de tu proyecto:</p>
+<pre><code>python-3.8.10
+</code></pre>
+<h3>5. Desplegar en Heroku</h3>
+<p>Ejecuta los siguientes comandos para desplegar tu aplicación en Heroku:</p>
+<pre><code class="language-bash">heroku login
+heroku create
+git push heroku master
+heroku run python manage.py migrate
+heroku open
+</code></pre>
+<hr />
+<h2>🎉 ¡Felicidades!</h2>
+<p>Has aprendido sobre el despliegue de aplicaciones Django y cómo llevar tu proyecto a producción. Ahora puedes compartir tu aplicación con el mundo y permitir que los usuarios finales la utilicen.</p>
+<hr />
+<p><strong>Creador:</strong> Iroennys Dev 💻
+<strong>GitHub:</strong> <a href="https://github.com/iroennys-admin">iroennys-admin</a></p>
+<p>¡Espero que esta lección te haya sido útil! Si tienes dudas, no dudes en contactarme. 😊</p>
+            </div>
+        </div>
+        <footer>
+            <p>Creador: <a href="https://github.com/iroennys-admin" target="_blank">Iroennys Dev</a> | © 2023 Curso de Django</p>
+        </footer>
+    </body>
+    </html>
+    

@@ -1,0 +1,178 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Curso de Django - Lección</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="../css/styles.css">
+        <style>
+            .lesson-content {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 2rem;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            .lesson-content h1, .lesson-content h2, .lesson-content h3 {
+                color: #667eea;
+            }
+            .lesson-content a {
+                color: #667eea;
+                text-decoration: none;
+            }
+            .lesson-content a:hover {
+                text-decoration: underline;
+            }
+            .lesson-content pre {
+                background: #f5f5f5;
+                padding: 1rem;
+                border-radius: 4px;
+                overflow-x: auto;
+            }
+            .lesson-content code {
+                background: #f5f5f5;
+                padding: 0.2rem 0.4rem;
+                border-radius: 4px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <img src="https://www.djangoproject.com/m/img/logos/django-logo-negative.png" alt="Django Logo" class="django-logo">
+            <h1>Curso de Django 🚀</h1>
+            <p>Aprende Django desde cero con Iroennys Dev</p>
+        </header>
+        <div class="container">
+            <div class="lesson-content">
+                <h1>Lección 6: URLs en Django 🔗</h1>
+<p>En esta lección, aprenderás sobre las URLs en Django. Las URLs definen las rutas de tu aplicación y cómo se mapean a las vistas.</p>
+<hr />
+<h2>📌 ¿Qué son las URLs?</h2>
+<p>En Django, las URLs son patrones que definen cómo se mapean las solicitudes HTTP a las vistas. Cada URL puede estar asociada a una vista específica, que se encarga de manejar la lógica de la solicitud y devolver una respuesta.</p>
+<hr />
+<h2>🛠️ Configuración de URLs</h2>
+<h3>1. Archivo <code>urls.py</code> del proyecto</h3>
+<p>El archivo <code>urls.py</code> en la carpeta de tu proyecto (<code>mi_proyecto/urls.py</code>) define las rutas principales de tu aplicación. Aquí puedes incluir las URLs de tus aplicaciones.</p>
+<h3>Ejemplo: Incluir URLs de una aplicación</h3>
+<p>Abre <code>mi_proyecto/urls.py</code> y modifícalo para incluir las URLs de tu aplicación:</p>
+<pre><code class="language-python">from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('mi_app.urls')),
+]
+</code></pre>
+<hr />
+<h2>📂 Archivo <code>urls.py</code> de la aplicación</h2>
+<h3>1. Crear un archivo <code>urls.py</code> para tu aplicación</h3>
+<p>Crea un archivo llamado <code>urls.py</code> dentro de tu aplicación <code>mi_app</code>:</p>
+<pre><code class="language-bash">touch mi_app/urls.py
+</code></pre>
+<h3>2. Definir las URLs de la aplicación</h3>
+<p>Abre <code>mi_app/urls.py</code> y define las URLs de tu aplicación:</p>
+<pre><code class="language-python">from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('libros/', views.lista_libros, name='lista_libros'),
+    path('libros/crear/', views.crear_libro, name='crear_libro'),
+]
+</code></pre>
+<h3>Explicación:</h3>
+<ul>
+<li><strong><code>path('libros/', views.lista_libros, name='lista_libros')</code></strong>: Define una ruta para la vista <code>lista_libros</code>.</li>
+<li><strong><code>name='lista_libros'</code></strong>: Asigna un nombre a la URL para referenciarla fácilmente en tus plantillas y vistas.</li>
+</ul>
+<hr />
+<h2>🔍 Parámetros en URLs</h2>
+<p>Puedes definir parámetros en tus URLs para capturar valores dinámicos.</p>
+<h3>Ejemplo: URL con parámetro</h3>
+<pre><code class="language-python">from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('libros/&lt;int:libro_id&gt;/', views.detalle_libro, name='detalle_libro'),
+]
+</code></pre>
+<h3>Vista para manejar el parámetro</h3>
+<p>Abre <code>mi_app/views.py</code> y define una vista para manejar el parámetro:</p>
+<pre><code class="language-python">from django.shortcuts import render, get_object_or_404
+from .models import Libro
+
+def detalle_libro(request, libro_id):
+    libro = get_object_or_404(Libro, pk=libro_id)
+    return render(request, 'mi_app/detalle_libro.html', {'libro': libro})
+</code></pre>
+<h3>Plantilla para mostrar el detalle del libro</h3>
+<p>Crea un archivo llamado <code>detalle_libro.html</code> dentro de <code>mi_app/templates/mi_app</code>:</p>
+<pre><code class="language-html">{% extends &quot;mi_app/base.html&quot; %}
+
+{% block title %}Detalle del Libro{% endblock %}
+
+{% block content %}
+    &lt;h1&gt;{{ libro.titulo }}&lt;/h1&gt;
+    &lt;p&gt;Autor: {{ libro.autor }}&lt;/p&gt;
+    &lt;p&gt;Fecha de publicación: {{ libro.fecha_publicacion }}&lt;/p&gt;
+    &lt;p&gt;Disponible: {% if libro.disponible %}Sí{% else %}No{% endif %}&lt;/p&gt;
+{% endblock %}
+</code></pre>
+<hr />
+<h2>📚 Nombres de URLs</h2>
+<p>Los nombres de URLs te permiten referenciar URLs en tus plantillas y vistas sin tener que escribir la URL completa. Esto es útil para evitar errores y hacer tu código más mantenible.</p>
+<h3>Ejemplo: Usar nombres de URLs en plantillas</h3>
+<pre><code class="language-html">&lt;a href=&quot;{% url 'lista_libros' %}&quot;&gt;Ver lista de libros&lt;/a&gt;
+&lt;a href=&quot;{% url 'detalle_libro' libro.id %}&quot;&gt;Ver detalle&lt;/a&gt;
+</code></pre>
+<h3>Ejemplo: Usar nombres de URLs en vistas</h3>
+<pre><code class="language-python">from django.shortcuts import redirect
+from django.urls import reverse
+
+def crear_libro(request):
+    if request.method == 'POST':
+        form = LibroForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('lista_libros'))
+    else:
+        form = LibroForm()
+    return render(request, 'mi_app/crear_libro.html', {'form': form})
+</code></pre>
+<hr />
+<h2>🎯 Espacios de nombres de URLs</h2>
+<p>Los espacios de nombres de URLs te permiten organizar tus URLs y evitar conflictos de nombres. Esto es especialmente útil en proyectos grandes con múltiples aplicaciones.</p>
+<h3>Ejemplo: Definir un espacio de nombres</h3>
+<p>Abre <code>mi_app/urls.py</code> y define un espacio de nombres:</p>
+<pre><code class="language-python">from django.urls import path
+from . import views
+
+app_name = 'mi_app'
+
+urlpatterns = [
+    path('libros/', views.lista_libros, name='lista_libros'),
+    path('libros/crear/', views.crear_libro, name='crear_libro'),
+    path('libros/&lt;int:libro_id&gt;/', views.detalle_libro, name='detalle_libro'),
+]
+</code></pre>
+<h3>Ejemplo: Usar espacios de nombres en plantillas</h3>
+<pre><code class="language-html">&lt;a href=&quot;{% url 'mi_app:lista_libros' %}&quot;&gt;Ver lista de libros&lt;/a&gt;
+&lt;a href=&quot;{% url 'mi_app:detalle_libro' libro.id %}&quot;&gt;Ver detalle&lt;/a&gt;
+</code></pre>
+<hr />
+<h2>🎉 ¡Felicidades!</h2>
+<p>Has aprendido sobre las URLs en Django y cómo configurar las rutas de tu aplicación. En la próxima lección, aprenderás sobre el panel de administración de Django y cómo gestionar tus modelos.</p>
+<hr />
+<p><strong>Creador:</strong> Iroennys Dev 💻
+<strong>GitHub:</strong> <a href="https://github.com/iroennys-admin">iroennys-admin</a></p>
+<p>¡Espero que esta lección te haya sido útil! Si tienes dudas, no dudes en contactarme. 😊</p>
+            </div>
+        </div>
+        <footer>
+            <p>Creador: <a href="https://github.com/iroennys-admin" target="_blank">Iroennys Dev</a> | © 2023 Curso de Django</p>
+        </footer>
+    </body>
+    </html>
+    

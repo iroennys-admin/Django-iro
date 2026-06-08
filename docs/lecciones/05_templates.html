@@ -1,0 +1,207 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Curso de Django - Lección</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="../css/styles.css">
+        <style>
+            .lesson-content {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 2rem;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            .lesson-content h1, .lesson-content h2, .lesson-content h3 {
+                color: #667eea;
+            }
+            .lesson-content a {
+                color: #667eea;
+                text-decoration: none;
+            }
+            .lesson-content a:hover {
+                text-decoration: underline;
+            }
+            .lesson-content pre {
+                background: #f5f5f5;
+                padding: 1rem;
+                border-radius: 4px;
+                overflow-x: auto;
+            }
+            .lesson-content code {
+                background: #f5f5f5;
+                padding: 0.2rem 0.4rem;
+                border-radius: 4px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <img src="https://www.djangoproject.com/m/img/logos/django-logo-negative.png" alt="Django Logo" class="django-logo">
+            <h1>Curso de Django 🚀</h1>
+            <p>Aprende Django desde cero con Iroennys Dev</p>
+        </header>
+        <div class="container">
+            <div class="lesson-content">
+                <h1>Lección 5: Plantillas en Django 📄</h1>
+<p>En esta lección, aprenderás sobre las plantillas en Django. Las plantillas definen cómo se muestra la información al usuario y te permiten crear interfaces dinámicas y reutilizables.</p>
+<hr />
+<h2>📌 ¿Qué son las plantillas?</h2>
+<p>En Django, una plantilla es un archivo de texto (generalmente HTML) que define la estructura y el diseño de una página web. Las plantillas pueden incluir etiquetas y filtros especiales que permiten insertar datos dinámicos y controlar el flujo de la página.</p>
+<hr />
+<h2>🛠️ Configuración de plantillas</h2>
+<h3>1. Crear una carpeta de plantillas</h3>
+<p>Crea una carpeta llamada <code>templates</code> dentro de tu aplicación <code>mi_app</code>:</p>
+<pre><code class="language-bash">mkdir -p mi_app/templates/mi_app
+</code></pre>
+<h3>2. Configurar templates en <code>settings.py</code></h3>
+<p>Abre <code>mi_proyecto/settings.py</code> y asegúrate de que la configuración de templates incluya la ruta a tu carpeta de templates:</p>
+<pre><code class="language-python">TEMPLATES = [
+    {
+        ...
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        ...
+    },
+]
+</code></pre>
+<hr />
+<h2>📂 Estructura de una plantilla</h2>
+<h3>Ejemplo: Plantilla para listar libros</h3>
+<p>Crea un archivo llamado <code>lista_libros.html</code> dentro de <code>mi_app/templates/mi_app</code>:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Lista de Libros&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Lista de Libros&lt;/h1&gt;
+    &lt;ul&gt;
+        {% for libro in libros %}
+            &lt;li&gt;{{ libro.titulo }} - {{ libro.autor }}&lt;/li&gt;
+        {% endfor %}
+    &lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3>Explicación:</h3>
+<ul>
+<li><strong><code>{% for libro in libros %}</code></strong>: Etiqueta de plantilla para iterar sobre una lista de libros.</li>
+<li><strong><code>{{ libro.titulo }}</code></strong>: Variable de plantilla para mostrar el título de un libro.</li>
+</ul>
+<hr />
+<h2>🔍 Etiquetas de plantilla</h2>
+<p>Las etiquetas de plantilla permiten controlar el flujo de la página y realizar operaciones lógicas.</p>
+<h3>Ejemplo: Condicionales</h3>
+<pre><code class="language-html">{% if libro.disponible %}
+    &lt;p&gt;Disponible&lt;/p&gt;
+{% else %}
+    &lt;p&gt;No disponible&lt;/p&gt;
+{% endif %}
+</code></pre>
+<h3>Ejemplo: Bucles</h3>
+<pre><code class="language-html">&lt;ul&gt;
+    {% for libro in libros %}
+        &lt;li&gt;{{ libro.titulo }}&lt;/li&gt;
+    {% empty %}
+        &lt;li&gt;No hay libros disponibles.&lt;/li&gt;
+    {% endfor %}
+&lt;/ul&gt;
+</code></pre>
+<hr />
+<h2>📚 Filtros de plantilla</h2>
+<p>Los filtros de plantilla permiten modificar variables antes de mostrarlas.</p>
+<h3>Ejemplo: Filtros comunes</h3>
+<pre><code class="language-html">{{ libro.titulo|upper }}          &lt;!-- Convierte a mayúsculas --&gt;
+{{ libro.fecha_publicacion|date:&quot;Y-m-d&quot; }}  &lt;!-- Formatea la fecha --&gt;
+{{ libro.descripcion|truncatewords:10 }}  &lt;!-- Trunca el texto a 10 palabras --&gt;
+</code></pre>
+<hr />
+<h2>🎯 Herencia de plantillas</h2>
+<p>La herencia de plantillas te permite crear una plantilla base y extenderla en otras plantillas. Esto es útil para evitar repetir código y mantener un diseño consistente.</p>
+<h3>1. Crear una plantilla base</h3>
+<p>Crea un archivo llamado <code>base.html</code> dentro de <code>mi_app/templates/mi_app</code>:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;{% block title %}Mi Sitio Web{% endblock %}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;
+        &lt;h1&gt;Bienvenido a mi sitio web&lt;/h1&gt;
+    &lt;/header&gt;
+    &lt;main&gt;
+        {% block content %}
+        {% endblock %}
+    &lt;/main&gt;
+    &lt;footer&gt;
+        &lt;p&gt;© 2023 Mi Sitio Web&lt;/p&gt;
+    &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3>2. Extender la plantilla base</h3>
+<p>Modifica <code>lista_libros.html</code> para extender la plantilla base:</p>
+<pre><code class="language-html">{% extends &quot;mi_app/base.html&quot; %}
+
+{% block title %}Lista de Libros{% endblock %}
+
+{% block content %}
+    &lt;h1&gt;Lista de Libros&lt;/h1&gt;
+    &lt;ul&gt;
+        {% for libro in libros %}
+            &lt;li&gt;{{ libro.titulo }} - {{ libro.autor }}&lt;/li&gt;
+        {% endfor %}
+    &lt;/ul&gt;
+{% endblock %}
+</code></pre>
+<hr />
+<h2>📝 Inclusión de plantillas</h2>
+<p>La inclusión de plantillas te permite reutilizar partes de una plantilla en otras plantillas.</p>
+<h3>1. Crear una plantilla parcial</h3>
+<p>Crea un archivo llamado <code>navbar.html</code> dentro de <code>mi_app/templates/mi_app</code>:</p>
+<pre><code class="language-html">&lt;nav&gt;
+    &lt;ul&gt;
+        &lt;li&gt;&lt;a href=&quot;/&quot;&gt;Inicio&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;/libros/&quot;&gt;Libros&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;/contacto/&quot;&gt;Contacto&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/nav&gt;
+</code></pre>
+<h3>2. Incluir la plantilla parcial</h3>
+<p>Modifica <code>base.html</code> para incluir la plantilla parcial:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;{% block title %}Mi Sitio Web{% endblock %}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    {% include &quot;mi_app/navbar.html&quot; %}
+    &lt;main&gt;
+        {% block content %}
+        {% endblock %}
+    &lt;/main&gt;
+    &lt;footer&gt;
+        &lt;p&gt;© 2023 Mi Sitio Web&lt;/p&gt;
+    &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<hr />
+<h2>🎉 ¡Felicidades!</h2>
+<p>Has aprendido sobre las plantillas en Django y cómo crear interfaces dinámicas y reutilizables. En la próxima lección, aprenderás sobre las URLs y cómo configurar las rutas de tu aplicación.</p>
+<hr />
+<p><strong>Creador:</strong> Iroennys Dev 💻
+<strong>GitHub:</strong> <a href="https://github.com/iroennys-admin">iroennys-admin</a></p>
+<p>¡Espero que esta lección te haya sido útil! Si tienes dudas, no dudes en contactarme. 😊</p>
+            </div>
+        </div>
+        <footer>
+            <p>Creador: <a href="https://github.com/iroennys-admin" target="_blank">Iroennys Dev</a> | © 2023 Curso de Django</p>
+        </footer>
+    </body>
+    </html>
+    

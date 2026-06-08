@@ -1,0 +1,227 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Curso de Django - Lección</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="../css/styles.css">
+        <style>
+            .lesson-content {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 2rem;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            .lesson-content h1, .lesson-content h2, .lesson-content h3 {
+                color: #667eea;
+            }
+            .lesson-content a {
+                color: #667eea;
+                text-decoration: none;
+            }
+            .lesson-content a:hover {
+                text-decoration: underline;
+            }
+            .lesson-content pre {
+                background: #f5f5f5;
+                padding: 1rem;
+                border-radius: 4px;
+                overflow-x: auto;
+            }
+            .lesson-content code {
+                background: #f5f5f5;
+                padding: 0.2rem 0.4rem;
+                border-radius: 4px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <img src="https://www.djangoproject.com/m/img/logos/django-logo-negative.png" alt="Django Logo" class="django-logo">
+            <h1>Curso de Django 🚀</h1>
+            <p>Aprende Django desde cero con Iroennys Dev</p>
+        </header>
+        <div class="container">
+            <div class="lesson-content">
+                <h1>Lección 8: Formularios en Django 📝</h1>
+<p>En esta lección, aprenderás sobre los formularios en Django. Los formularios te permiten manejar la entrada de datos de los usuarios y validarlos antes de procesarlos.</p>
+<hr />
+<h2>📌 ¿Qué son los formularios?</h2>
+<p>En Django, un formulario es una clase que hereda de <code>django.forms.Form</code> o <code>django.forms.ModelForm</code>. Los formularios te permiten definir campos, validar datos y renderizar formularios HTML.</p>
+<hr />
+<h2>🛠️ Crear un formulario</h2>
+<h3>1. Formulario básico</h3>
+<p>Crea un archivo llamado <code>forms.py</code> dentro de tu aplicación <code>mi_app</code>:</p>
+<pre><code class="language-python">from django import forms
+
+class ContactoForm(forms.Form):
+    nombre = forms.CharField(max_length=100)
+    email = forms.EmailField()
+    mensaje = forms.CharField(widget=forms.Textarea)
+</code></pre>
+<h3>Explicación:</h3>
+<ul>
+<li><strong><code>CharField</code></strong>: Campo de texto con una longitud máxima.</li>
+<li><strong><code>EmailField</code></strong>: Campo de correo electrónico.</li>
+<li><strong><code>widget=forms.Textarea</code></strong>: Define el widget para renderizar el campo como un área de texto.</li>
+</ul>
+<hr />
+<h2>📂 Renderizar un formulario</h2>
+<h3>1. Crear una vista para el formulario</h3>
+<p>Abre <code>mi_app/views.py</code> y define una vista para manejar el formulario:</p>
+<pre><code class="language-python">from django.shortcuts import render
+from .forms import ContactoForm
+
+def contacto(request):
+    if request.method == 'POST':
+        form = ContactoForm(request.POST)
+        if form.is_valid():
+            # Procesar los datos del formulario
+            nombre = form.cleaned_data['nombre']
+            email = form.cleaned_data['email']
+            mensaje = form.cleaned_data['mensaje']
+            # Aquí puedes guardar los datos en la base de datos o enviar un correo electrónico
+            return render(request, 'mi_app/gracias.html', {'nombre': nombre})
+    else:
+        form = ContactoForm()
+    return render(request, 'mi_app/contacto.html', {'form': form})
+</code></pre>
+<h3>2. Crear una plantilla para el formulario</h3>
+<p>Crea un archivo llamado <code>contacto.html</code> dentro de <code>mi_app/templates/mi_app</code>:</p>
+<pre><code class="language-html">{% extends &quot;mi_app/base.html&quot; %}
+
+{% block title %}Contacto{% endblock %}
+
+{% block content %}
+    &lt;h1&gt;Contacto&lt;/h1&gt;
+    &lt;form method=&quot;post&quot;&gt;
+        {% csrf_token %}
+        {{ form.as_p }}
+        &lt;button type=&quot;submit&quot;&gt;Enviar&lt;/button&gt;
+    &lt;/form&gt;
+{% endblock %}
+</code></pre>
+<h3>3. Crear una plantilla de agradecimiento</h3>
+<p>Crea un archivo llamado <code>gracias.html</code> dentro de <code>mi_app/templates/mi_app</code>:</p>
+<pre><code class="language-html">{% extends &quot;mi_app/base.html&quot; %}
+
+{% block title %}Gracias{% endblock %}
+
+{% block content %}
+    &lt;h1&gt;Gracias, {{ nombre }}!&lt;/h1&gt;
+    &lt;p&gt;Tu mensaje ha sido enviado correctamente.&lt;/p&gt;
+{% endblock %}
+</code></pre>
+<hr />
+<h2>🔍 Validación de formularios</h2>
+<h3>1. Validación básica</h3>
+<p>Django realiza validación básica automáticamente según el tipo de campo. Por ejemplo, <code>EmailField</code> valida que el correo electrónico tenga un formato válido.</p>
+<h3>2. Validación personalizada</h3>
+<p>Puedes agregar validación personalizada a tus formularios definiendo un método <code>clean_&lt;nombre_del_campo&gt;</code>:</p>
+<pre><code class="language-python">from django import forms
+
+class ContactoForm(forms.Form):
+    nombre = forms.CharField(max_length=100)
+    email = forms.EmailField()
+    mensaje = forms.CharField(widget=forms.Textarea)
+
+    def clean_nombre(self):
+        nombre = self.cleaned_data['nombre']
+        if len(nombre) &lt; 3:
+            raise forms.ValidationError(&quot;El nombre debe tener al menos 3 caracteres.&quot;)
+        return nombre
+</code></pre>
+<hr />
+<h2>📚 Formularios basados en modelos</h2>
+<h3>1. Crear un formulario basado en un modelo</h3>
+<p>Puedes crear un formulario basado en un modelo para simplificar la creación de formularios que guardan datos en la base de datos:</p>
+<pre><code class="language-python">from django import forms
+from .models import Libro
+
+class LibroForm(forms.ModelForm):
+    class Meta:
+        model = Libro
+        fields = ['titulo', 'autor', 'fecha_publicacion', 'disponible']
+</code></pre>
+<h3>2. Crear una vista para el formulario basado en modelo</h3>
+<p>Abre <code>mi_app/views.py</code> y define una vista para manejar el formulario:</p>
+<pre><code class="language-python">from django.shortcuts import render, redirect
+from .forms import LibroForm
+
+def crear_libro(request):
+    if request.method == 'POST':
+        form = LibroForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_libros')
+    else:
+        form = LibroForm()
+    return render(request, 'mi_app/crear_libro.html', {'form': form})
+</code></pre>
+<h3>3. Crear una plantilla para el formulario basado en modelo</h3>
+<p>Crea un archivo llamado <code>crear_libro.html</code> dentro de <code>mi_app/templates/mi_app</code>:</p>
+<pre><code class="language-html">{% extends &quot;mi_app/base.html&quot; %}
+
+{% block title %}Crear Libro{% endblock %}
+
+{% block content %}
+    &lt;h1&gt;Crear Libro&lt;/h1&gt;
+    &lt;form method=&quot;post&quot;&gt;
+        {% csrf_token %}
+        {{ form.as_p }}
+        &lt;button type=&quot;submit&quot;&gt;Guardar&lt;/button&gt;
+    &lt;/form&gt;
+{% endblock %}
+</code></pre>
+<hr />
+<h2>🎯 Personalización de formularios</h2>
+<h3>1. Personalizar widgets</h3>
+<p>Puedes personalizar los widgets de tus formularios para cambiar cómo se renderizan los campos:</p>
+<pre><code class="language-python">from django import forms
+from .models import Libro
+
+class LibroForm(forms.ModelForm):
+    class Meta:
+        model = Libro
+        fields = ['titulo', 'autor', 'fecha_publicacion', 'disponible']
+        widgets = {
+            'fecha_publicacion': forms.DateInput(attrs={'type': 'date'}),
+            'disponible': forms.CheckboxInput(attrs={'class': 'custom-checkbox'}),
+        }
+</code></pre>
+<h3>2. Personalizar etiquetas y ayuda</h3>
+<p>Puedes personalizar las etiquetas y la ayuda de tus formularios:</p>
+<pre><code class="language-python">from django import forms
+from .models import Libro
+
+class LibroForm(forms.ModelForm):
+    class Meta:
+        model = Libro
+        fields = ['titulo', 'autor', 'fecha_publicacion', 'disponible']
+        labels = {
+            'titulo': 'Título del libro',
+            'autor': 'Autor del libro',
+        }
+        help_texts = {
+            'fecha_publicacion': 'Formato: YYYY-MM-DD',
+        }
+</code></pre>
+<hr />
+<h2>🎉 ¡Felicidades!</h2>
+<p>Has aprendido sobre los formularios en Django y cómo manejar la entrada de datos de los usuarios. En la próxima lección, aprenderás sobre el despliegue de aplicaciones Django y cómo llevar tu proyecto a producción.</p>
+<hr />
+<p><strong>Creador:</strong> Iroennys Dev 💻
+<strong>GitHub:</strong> <a href="https://github.com/iroennys-admin">iroennys-admin</a></p>
+<p>¡Espero que esta lección te haya sido útil! Si tienes dudas, no dudes en contactarme. 😊</p>
+            </div>
+        </div>
+        <footer>
+            <p>Creador: <a href="https://github.com/iroennys-admin" target="_blank">Iroennys Dev</a> | © 2023 Curso de Django</p>
+        </footer>
+    </body>
+    </html>
+    

@@ -1,0 +1,177 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Curso de Django - Lección</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="../css/styles.css">
+        <style>
+            .lesson-content {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 2rem;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            .lesson-content h1, .lesson-content h2, .lesson-content h3 {
+                color: #667eea;
+            }
+            .lesson-content a {
+                color: #667eea;
+                text-decoration: none;
+            }
+            .lesson-content a:hover {
+                text-decoration: underline;
+            }
+            .lesson-content pre {
+                background: #f5f5f5;
+                padding: 1rem;
+                border-radius: 4px;
+                overflow-x: auto;
+            }
+            .lesson-content code {
+                background: #f5f5f5;
+                padding: 0.2rem 0.4rem;
+                border-radius: 4px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <img src="https://www.djangoproject.com/m/img/logos/django-logo-negative.png" alt="Django Logo" class="django-logo">
+            <h1>Curso de Django 🚀</h1>
+            <p>Aprende Django desde cero con Iroennys Dev</p>
+        </header>
+        <div class="container">
+            <div class="lesson-content">
+                <h1>Lección 3: Modelos en Django 📝</h1>
+<p>En esta lección, aprenderás sobre los modelos en Django. Los modelos definen la estructura de tu base de datos y te permiten interactuar con ella de manera sencilla.</p>
+<hr />
+<h2>📌 ¿Qué son los modelos?</h2>
+<p>En Django, un modelo es una clase que hereda de <code>django.db.models.Model</code>. Cada modelo representa una tabla en la base de datos, y cada atributo de la clase representa un campo en esa tabla.</p>
+<hr />
+<h2>🛠️ Crear un modelo</h2>
+<h3>Ejemplo: Modelo <code>Libro</code></h3>
+<p>Abre el archivo <code>mi_app/models.py</code> y define un modelo llamado <code>Libro</code>:</p>
+<pre><code class="language-python">from django.db import models
+
+class Libro(models.Model):
+    titulo = models.CharField(max_length=100)
+    autor = models.CharField(max_length=50)
+    fecha_publicacion = models.DateField()
+    disponible = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.titulo
+</code></pre>
+<h3>Explicación de los campos:</h3>
+<ul>
+<li><strong>CharField</strong>: Campo de texto con una longitud máxima.</li>
+<li><strong>DateField</strong>: Campo de fecha.</li>
+<li><strong>BooleanField</strong>: Campo booleano (True/False).</li>
+</ul>
+<hr />
+<h2>📂 Migraciones</h2>
+<p>Las migraciones son la manera en que Django propaga los cambios que haces en tus modelos (agregar un campo, eliminar un modelo, etc.) a tu esquema de base de datos.</p>
+<h3>1. Crear una migración</h3>
+<p>Ejecuta el siguiente comando para crear una migración basada en los cambios en tus modelos:</p>
+<pre><code class="language-bash">python manage.py makemigrations
+</code></pre>
+<h3>2. Aplicar la migración</h3>
+<p>Ejecuta el siguiente comando para aplicar la migración a tu base de datos:</p>
+<pre><code class="language-bash">python manage.py migrate
+</code></pre>
+<hr />
+<h2>🔍 Operaciones con modelos</h2>
+<h3>Crear un registro</h3>
+<p>Puedes crear un nuevo registro en la base de datos de la siguiente manera:</p>
+<pre><code class="language-python">from mi_app.models import Libro
+
+libro = Libro(titulo=&quot;Cien años de soledad&quot;, autor=&quot;Gabriel García Márquez&quot;, fecha_publicacion=&quot;1967-05-30&quot;)
+libro.save()
+</code></pre>
+<h3>Consultar registros</h3>
+<p>Puedes consultar registros de la base de datos usando el administrador de objetos del modelo:</p>
+<pre><code class="language-python"># Obtener todos los libros
+libros = Libro.objects.all()
+
+# Obtener un libro por su título
+libro = Libro.objects.get(titulo=&quot;Cien años de soledad&quot;)
+
+# Filtrar libros por autor
+libros = Libro.objects.filter(autor=&quot;Gabriel García Márquez&quot;)
+</code></pre>
+<h3>Actualizar un registro</h3>
+<p>Puedes actualizar un registro de la siguiente manera:</p>
+<pre><code class="language-python">libro = Libro.objects.get(titulo=&quot;Cien años de soledad&quot;)
+libro.disponible = False
+libro.save()
+</code></pre>
+<h3>Eliminar un registro</h3>
+<p>Puedes eliminar un registro de la siguiente manera:</p>
+<pre><code class="language-python">libro = Libro.objects.get(titulo=&quot;Cien años de soledad&quot;)
+libro.delete()
+</code></pre>
+<hr />
+<h2>📚 Tipos de campos comunes</h2>
+<p>Aquí tienes algunos tipos de campos comunes que puedes usar en tus modelos:</p>
+<ul>
+<li><strong>CharField</strong>: Campo de texto con una longitud máxima.</li>
+<li><strong>TextField</strong>: Campo de texto largo.</li>
+<li><strong>IntegerField</strong>: Campo numérico entero.</li>
+<li><strong>FloatField</strong>: Campo numérico de punto flotante.</li>
+<li><strong>DateField</strong>: Campo de fecha.</li>
+<li><strong>DateTimeField</strong>: Campo de fecha y hora.</li>
+<li><strong>BooleanField</strong>: Campo booleano (True/False).</li>
+<li><strong>EmailField</strong>: Campo de correo electrónico.</li>
+<li><strong>URLField</strong>: Campo de URL.</li>
+<li><strong>ForeignKey</strong>: Campo de clave foránea para relaciones entre modelos.</li>
+</ul>
+<hr />
+<h2>🎯 Relaciones entre modelos</h2>
+<h3>Relación uno a muchos</h3>
+<p>Puedes definir una relación uno a muchos usando <code>ForeignKey</code>:</p>
+<pre><code class="language-python">class Autor(models.Model):
+    nombre = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.nombre
+
+class Libro(models.Model):
+    titulo = models.CharField(max_length=100)
+    autor = models.ForeignKey(Autor, on_delete=models.CASCADE)
+    fecha_publicacion = models.DateField()
+    disponible = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.titulo
+</code></pre>
+<h3>Relación muchos a muchos</h3>
+<p>Puedes definir una relación muchos a muchos usando <code>ManyToManyField</code>:</p>
+<pre><code class="language-python">class Libro(models.Model):
+    titulo = models.CharField(max_length=100)
+    autores = models.ManyToManyField(Autor)
+    fecha_publicacion = models.DateField()
+    disponible = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.titulo
+</code></pre>
+<hr />
+<h2>🎉 ¡Felicidades!</h2>
+<p>Has aprendido sobre los modelos en Django y cómo interactuar con la base de datos. En la próxima lección, aprenderás sobre las vistas y cómo manejar la lógica de tu aplicación.</p>
+<hr />
+<p><strong>Creador:</strong> Iroennys Dev 💻
+<strong>GitHub:</strong> <a href="https://github.com/iroennys-admin">iroennys-admin</a></p>
+<p>¡Espero que esta lección te haya sido útil! Si tienes dudas, no dudes en contactarme. 😊</p>
+            </div>
+        </div>
+        <footer>
+            <p>Creador: <a href="https://github.com/iroennys-admin" target="_blank">Iroennys Dev</a> | © 2023 Curso de Django</p>
+        </footer>
+    </body>
+    </html>
+    

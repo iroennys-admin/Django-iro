@@ -1,0 +1,194 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Curso de Django - Lección</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="../css/styles.css">
+        <style>
+            .lesson-content {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 2rem;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            .lesson-content h1, .lesson-content h2, .lesson-content h3 {
+                color: #667eea;
+            }
+            .lesson-content a {
+                color: #667eea;
+                text-decoration: none;
+            }
+            .lesson-content a:hover {
+                text-decoration: underline;
+            }
+            .lesson-content pre {
+                background: #f5f5f5;
+                padding: 1rem;
+                border-radius: 4px;
+                overflow-x: auto;
+            }
+            .lesson-content code {
+                background: #f5f5f5;
+                padding: 0.2rem 0.4rem;
+                border-radius: 4px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <img src="https://www.djangoproject.com/m/img/logos/django-logo-negative.png" alt="Django Logo" class="django-logo">
+            <h1>Curso de Django 🚀</h1>
+            <p>Aprende Django desde cero con Iroennys Dev</p>
+        </header>
+        <div class="container">
+            <div class="lesson-content">
+                <h1>Lección 4: Vistas en Django 🌐</h1>
+<p>En esta lección, aprenderás sobre las vistas en Django. Las vistas son responsables de manejar la lógica de tu aplicación y devolver una respuesta al usuario.</p>
+<hr />
+<h2>📌 ¿Qué son las vistas?</h2>
+<p>En Django, una vista es una función o clase que recibe una solicitud HTTP y devuelve una respuesta HTTP. Las vistas pueden renderizar plantillas, redirigir a otras URLs, o devolver datos en formato JSON, entre otras cosas.</p>
+<hr />
+<h2>🛠️ Crear una vista</h2>
+<h3>Ejemplo: Vista para listar libros</h3>
+<p>Abre el archivo <code>mi_app/views.py</code> y define una vista llamada <code>lista_libros</code>:</p>
+<pre><code class="language-python">from django.shortcuts import render
+from .models import Libro
+
+def lista_libros(request):
+    libros = Libro.objects.all()
+    return render(request, 'mi_app/lista_libros.html', {'libros': libros})
+</code></pre>
+<h3>Explicación:</h3>
+<ul>
+<li><strong>request</strong>: El objeto de solicitud HTTP.</li>
+<li><strong>Libro.objects.all()</strong>: Consulta todos los libros de la base de datos.</li>
+<li><strong>render</strong>: Renderiza una plantilla y devuelve una respuesta HTTP.</li>
+</ul>
+<hr />
+<h2>📂 Plantillas</h2>
+<p>Las plantillas definen cómo se muestra la información al usuario. En Django, las plantillas suelen ser archivos HTML con etiquetas especiales que permiten insertar datos dinámicos.</p>
+<h3>1. Crear una plantilla</h3>
+<p>Crea una carpeta llamada <code>templates</code> dentro de tu aplicación <code>mi_app</code>:</p>
+<pre><code class="language-bash">mkdir -p mi_app/templates/mi_app
+</code></pre>
+<p>Dentro de esta carpeta, crea un archivo llamado <code>lista_libros.html</code>:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Lista de Libros&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Lista de Libros&lt;/h1&gt;
+    &lt;ul&gt;
+        {% for libro in libros %}
+            &lt;li&gt;{{ libro.titulo }} - {{ libro.autor }}&lt;/li&gt;
+        {% endfor %}
+    &lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3>2. Configurar templates en <code>settings.py</code></h3>
+<p>Abre <code>mi_proyecto/settings.py</code> y asegúrate de que la configuración de templates incluya la ruta a tu carpeta de templates:</p>
+<pre><code class="language-python">TEMPLATES = [
+    {
+        ...
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        ...
+    },
+]
+</code></pre>
+<hr />
+<h2>🔍 Tipos de vistas</h2>
+<h3>Vistas basadas en funciones</h3>
+<p>Las vistas basadas en funciones son funciones de Python que reciben una solicitud y devuelven una respuesta:</p>
+<pre><code class="language-python">from django.http import HttpResponse
+
+def hola_mundo(request):
+    return HttpResponse(&quot;¡Hola, mundo!&quot;)
+</code></pre>
+<h3>Vistas basadas en clases</h3>
+<p>Las vistas basadas en clases son clases de Python que heredan de <code>django.views.View</code> o alguna de sus subclases:</p>
+<pre><code class="language-python">from django.views import View
+from django.http import HttpResponse
+
+class HolaMundoView(View):
+    def get(self, request):
+        return HttpResponse(&quot;¡Hola, mundo!&quot;)
+</code></pre>
+<hr />
+<h2>📚 Vistas genéricas</h2>
+<p>Django incluye vistas genéricas que puedes usar para realizar tareas comunes, como listar objetos, mostrar detalles de un objeto, crear, actualizar y eliminar objetos.</p>
+<h3>Ejemplo: Vista genérica para listar libros</h3>
+<p>Abre <code>mi_app/views.py</code> y define una vista genérica:</p>
+<pre><code class="language-python">from django.views.generic import ListView
+from .models import Libro
+
+class ListaLibrosView(ListView):
+    model = Libro
+    template_name = 'mi_app/lista_libros.html'
+    context_object_name = 'libros'
+</code></pre>
+<hr />
+<h2>🎯 Manejo de formularios</h2>
+<h3>Crear un formulario</h3>
+<p>Crea un archivo llamado <code>forms.py</code> dentro de tu aplicación <code>mi_app</code>:</p>
+<pre><code class="language-python">from django import forms
+from .models import Libro
+
+class LibroForm(forms.ModelForm):
+    class Meta:
+        model = Libro
+        fields = ['titulo', 'autor', 'fecha_publicacion', 'disponible']
+</code></pre>
+<h3>Vista para crear un libro</h3>
+<p>Abre <code>mi_app/views.py</code> y define una vista para crear un libro:</p>
+<pre><code class="language-python">from django.shortcuts import render, redirect
+from .forms import LibroForm
+
+def crear_libro(request):
+    if request.method == 'POST':
+        form = LibroForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_libros')
+    else:
+        form = LibroForm()
+    return render(request, 'mi_app/crear_libro.html', {'form': form})
+</code></pre>
+<h3>Plantilla para crear un libro</h3>
+<p>Crea un archivo llamado <code>crear_libro.html</code> dentro de <code>mi_app/templates/mi_app</code>:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Crear Libro&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Crear Libro&lt;/h1&gt;
+    &lt;form method=&quot;post&quot;&gt;
+        {% csrf_token %}
+        {{ form.as_p }}
+        &lt;button type=&quot;submit&quot;&gt;Guardar&lt;/button&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<hr />
+<h2>🎉 ¡Felicidades!</h2>
+<p>Has aprendido sobre las vistas en Django y cómo manejar la lógica de tu aplicación. En la próxima lección, aprenderás sobre las URLs y cómo configurar las rutas de tu aplicación.</p>
+<hr />
+<p><strong>Creador:</strong> Iroennys Dev 💻
+<strong>GitHub:</strong> <a href="https://github.com/iroennys-admin">iroennys-admin</a></p>
+<p>¡Espero que esta lección te haya sido útil! Si tienes dudas, no dudes en contactarme. 😊</p>
+            </div>
+        </div>
+        <footer>
+            <p>Creador: <a href="https://github.com/iroennys-admin" target="_blank">Iroennys Dev</a> | © 2023 Curso de Django</p>
+        </footer>
+    </body>
+    </html>
+    

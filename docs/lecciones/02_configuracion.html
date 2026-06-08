@@ -1,0 +1,144 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Curso de Django - Lección</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="../css/styles.css">
+        <style>
+            .lesson-content {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 2rem;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            .lesson-content h1, .lesson-content h2, .lesson-content h3 {
+                color: #667eea;
+            }
+            .lesson-content a {
+                color: #667eea;
+                text-decoration: none;
+            }
+            .lesson-content a:hover {
+                text-decoration: underline;
+            }
+            .lesson-content pre {
+                background: #f5f5f5;
+                padding: 1rem;
+                border-radius: 4px;
+                overflow-x: auto;
+            }
+            .lesson-content code {
+                background: #f5f5f5;
+                padding: 0.2rem 0.4rem;
+                border-radius: 4px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <img src="https://www.djangoproject.com/m/img/logos/django-logo-negative.png" alt="Django Logo" class="django-logo">
+            <h1>Curso de Django 🚀</h1>
+            <p>Aprende Django desde cero con Iroennys Dev</p>
+        </header>
+        <div class="container">
+            <div class="lesson-content">
+                <h1>Lección 2: Configuración Inicial 🛠️</h1>
+<p>En esta lección, aprenderás cómo configurar tu entorno de desarrollo y crear tu primer proyecto Django. ¡Vamos a poner las manos en el código! 💻</p>
+<hr />
+<h2>📌 Requisitos previos</h2>
+<p>Asegúrate de tener instalado Python en tu sistema. Puedes verificarlo ejecutando:</p>
+<pre><code class="language-bash">python --version
+</code></pre>
+<p>Si no tienes Python instalado, descárgalo desde <a href="https://www.python.org/downloads/">python.org</a>.</p>
+<hr />
+<h2>🛠️ Instalación de Django</h2>
+<p>Instala Django usando pip, el gestor de paquetes de Python:</p>
+<pre><code class="language-bash">pip install django
+</code></pre>
+<p>Para verificar que Django se ha instalado correctamente, ejecuta:</p>
+<pre><code class="language-bash">python -m django --version
+</code></pre>
+<hr />
+<h2>🚀 Crear un proyecto Django</h2>
+<p>Abre una terminal y ejecuta el siguiente comando para crear un nuevo proyecto Django:</p>
+<pre><code class="language-bash">django-admin startproject mi_proyecto
+</code></pre>
+<p>Esto creará una carpeta llamada <code>mi_proyecto</code> con la siguiente estructura:</p>
+<pre><code>mi_proyecto/
+    manage.py          # Script para gestionar el proyecto
+    mi_proyecto/
+        __init__.py
+        settings.py    # Configuración del proyecto
+        urls.py        # Rutas principales
+        asgi.py        # Configuración ASGI (para servidores asíncronos)
+        wsgi.py        # Configuración WSGI (para servidores síncronos)
+</code></pre>
+<hr />
+<h2>📂 Navegar al proyecto</h2>
+<p>Entra en la carpeta de tu proyecto:</p>
+<pre><code class="language-bash">cd mi_proyecto
+</code></pre>
+<hr />
+<h2>🌐 Ejecutar el servidor de desarrollo</h2>
+<p>Django viene con un servidor de desarrollo integrado que puedes usar para probar tu aplicación localmente. Ejecuta el siguiente comando:</p>
+<pre><code class="language-bash">python manage.py runserver
+</code></pre>
+<p>Abre tu navegador y ve a <a href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a>. ¡Verás la página de bienvenida de Django!</p>
+<hr />
+<h2>📝 Configuración básica</h2>
+<h3>Archivo <code>settings.py</code></h3>
+<p>El archivo <code>settings.py</code> contiene la configuración de tu proyecto. Aquí puedes configurar cosas como:</p>
+<ul>
+<li><strong>BASE_DIR</strong>: La ruta base de tu proyecto.</li>
+<li><strong>SECRET_KEY</strong>: Una clave secreta para la seguridad de tu proyecto.</li>
+<li><strong>DEBUG</strong>: Modo de depuración (debe ser <code>True</code> en desarrollo y <code>False</code> en producción).</li>
+<li><strong>ALLOWED_HOSTS</strong>: Lista de hosts permitidos para tu aplicación.</li>
+<li><strong>INSTALLED_APPS</strong>: Lista de aplicaciones instaladas en tu proyecto.</li>
+<li><strong>DATABASES</strong>: Configuración de la base de datos.</li>
+</ul>
+<h3>Archivo <code>urls.py</code></h3>
+<p>El archivo <code>urls.py</code> define las rutas de tu proyecto. Aquí puedes mapear URLs a vistas.</p>
+<hr />
+<h2>🎯 Crear una aplicación Django</h2>
+<p>En Django, un proyecto puede tener múltiples aplicaciones. Cada aplicación representa una funcionalidad específica (ej: blog, usuarios, tienda).</p>
+<h3>1. Crear una aplicación</h3>
+<p>Ejecuta el siguiente comando para crear una nueva aplicación:</p>
+<pre><code class="language-bash">python manage.py startapp mi_app
+</code></pre>
+<p>Esto creará una carpeta llamada <code>mi_app</code> con la siguiente estructura:</p>
+<pre><code>mi_app/
+    __init__.py
+    admin.py       # Configuración del panel de administración
+    apps.py        # Configuración de la aplicación
+    models.py      # Modelos de la base de datos
+    tests.py       # Pruebas unitarias
+    views.py       # Vistas de la aplicación
+    migrations/   # Migraciones de la base de datos
+</code></pre>
+<h3>2. Registrar la aplicación</h3>
+<p>Abre <code>mi_proyecto/settings.py</code> y agrega tu aplicación a <code>INSTALLED_APPS</code>:</p>
+<pre><code class="language-python">INSTALLED_APPS = [
+    ...
+    'mi_app',
+]
+</code></pre>
+<hr />
+<h2>🎉 ¡Felicidades!</h2>
+<p>Has configurado tu entorno de desarrollo y creado tu primer proyecto Django. En la próxima lección, aprenderás sobre los modelos y cómo trabajar con bases de datos en Django.</p>
+<hr />
+<p><strong>Creador:</strong> Iroennys Dev 💻
+<strong>GitHub:</strong> <a href="https://github.com/iroennys-admin">iroennys-admin</a></p>
+<p>¡Espero que esta lección te haya sido útil! Si tienes dudas, no dudes en contactarme. 😊</p>
+            </div>
+        </div>
+        <footer>
+            <p>Creador: <a href="https://github.com/iroennys-admin" target="_blank">Iroennys Dev</a> | © 2023 Curso de Django</p>
+        </footer>
+    </body>
+    </html>
+    
