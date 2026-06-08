@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso de Django por Iroennys Dev</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        header p {
+            margin: 0.5rem 0 0;
+            font-size: 1.2rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .course-info {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .course-info h2 {
+            color: #667eea;
+        }
+        .lessons {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .lesson-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .lesson-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .lesson-card h3 {
+            color: #667eea;
+            margin-top: 0;
+        }
+        .lesson-card p {
+            color: #666;
+        }
+        .lesson-card a {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+        .lesson-card a:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background: #333;
+            color: white;
+            margin-top: 2rem;
+        }
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        .django-logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://www.djangoproject.com/m/img/logos/django-logo-negative.png" alt="Django Logo" class="django-logo">
+        <h1>Curso de Django</h1>
+        <p>Aprende Django desde cero con Iroennys Dev</p>
+    </header>
+    <div class="container">
+        <div class="course-info">
+            <h2>📚 Sobre el Curso</h2>
+            <p>Este curso está diseñado para principiantes que desean aprender a desarrollar aplicaciones web con Django, el framework más popular de Python. A través de lecciones prácticas, aprenderás desde la configuración inicial hasta el despliegue de tu aplicación.</p>
+        </div>
+        <div class="lessons">
+            <div class="lesson-card">
+                <h3>Lección 1: Introducción a Django</h3>
+                <p>Aprende qué es Django, sus características y por qué es una excelente opción para desarrollar aplicaciones web.</p>
+                <a href="lecciones/01_introduccion/README.md" target="_blank">Ver Lección</a>
+            </div>
+            <div class="lesson-card">
+                <h3>Lección 2: Configuración Inicial</h3>
+                <p>Configura tu entorno de desarrollo y crea tu primer proyecto Django.</p>
+                <a href="lecciones/02_configuracion/README.md" target="_blank">Ver Lección</a>
+            </div>
+            <div class="lesson-card">
+                <h3>Lección 3: Modelos en Django</h3>
+                <p>Aprende a definir modelos y trabajar con bases de datos en Django.</p>
+                <a href="lecciones/03_modelos/README.md" target="_blank">Ver Lección</a>
+            </div>
+            <div class="lesson-card">
+                <h3>Lección 4: Vistas en Django</h3>
+                <p>Descubre cómo crear vistas para manejar la lógica de tu aplicación.</p>
+                <a href="lecciones/04_vistas/README.md" target="_blank">Ver Lección</a>
+            </div>
+            <div class="lesson-card">
+                <h3>Lección 5: Plantillas en Django</h3>
+                <p>Aprende a crear plantillas dinámicas para tus aplicaciones.</p>
+                <a href="lecciones/05_templates/README.md" target="_blank">Ver Lección</a>
+            </div>
+            <div class="lesson-card">
+                <h3>Lección 6: URLs en Django</h3>
+                <p>Configura las rutas de tu aplicación y aprende a manejar parámetros en URLs.</p>
+                <a href="lecciones/06_urls/README.md" target="_blank">Ver Lección</a>
+            </div>
+            <div class="lesson-card">
+                <h3>Lección 7: Panel de Administración</h3>
+                <p>Descubre cómo usar y personalizar el panel de administración de Django.</p>
+                <a href="lecciones/07_admin/README.md" target="_blank">Ver Lección</a>
+            </div>
+            <div class="lesson-card">
+                <h3>Lección 8: Formularios en Django</h3>
+                <p>Aprende a crear y validar formularios para manejar datos de usuarios.</p>
+                <a href="lecciones/08_formularios/README.md" target="_blank">Ver Lección</a>
+            </div>
+            <div class="lesson-card">
+                <h3>Lección 9: Despliegue de Aplicaciones</h3>
+                <p>Lleva tu aplicación a producción y aprende a desplegarla en diferentes plataformas.</p>
+                <a href="lecciones/09_despliegue/README.md" target="_blank">Ver Lección</a>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>Creador: <a href="https://github.com/iroennys-admin" target="_blank">Iroennys Dev</a> | © 2023 Curso de Django</p>
+    </footer>
+</body>
+</html>
