@@ -1,0 +1,29 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    padding-top: 56px; /* Ajuste para la barra de navegación fija */
+}
+
+.hero {
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    color: white;
+    padding: 100px 0;
+}
+
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+    background-color: #6e8efb;
+    border-color: #6e8efb;
+}
+
+.btn-primary:hover {
+    background-color: #a777e3;
+    border-color: #a777e3;
+}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Sección Hero -->
+<section id="inicio" class="hero bg-light py-5">
+    <div class="container text-center" data-aos="fade-up">
+        <h1 class="display-4 fw-bold">Curso de Django 🚀</h1>
+        <p class="lead">Aprende Django desde cero con Iroennys Dev</p>
+        <a href="#lecciones" class="btn btn-primary btn-lg mt-3">Empezar el Curso</a>
+    </div>
+</section>
+
+<!-- Sección Lecciones -->
+<section id="lecciones" class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Lecciones del Curso</h2>
+        <div class="row">
+            {% for leccion in lecciones %}
+            <div class="col-md-4 mb-4" data-aos="fade-up">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ leccion.titulo }}</h5>
+                        <p class="card-text">{{ leccion.descripcion }}</p>
+                        <a href="{{ leccion.enlace }}" class="btn btn-outline-primary">Ver Lección</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

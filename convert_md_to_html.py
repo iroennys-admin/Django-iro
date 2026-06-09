@@ -3,87 +3,58 @@
 import os
 import markdown
 
-# Directorio de lecciones
+# Directorios
 LESSONS_DIR = "lecciones"
 DOCS_DIR = "docs"
+TEMPLATES_DIR = "templates"
 
-# Crear directorio para lecciones en docs
+# Crear directorios necesarios
 LESSONS_DOCS_DIR = os.path.join(DOCS_DIR, "lecciones")
 os.makedirs(LESSONS_DOCS_DIR, exist_ok=True)
+os.makedirs(DOCS_DIR, exist_ok=True)
 
-# Convertir cada archivo README.md a HTML
-def convert_md_to_html(md_file, html_file):
+# Convertir Markdown a HTML con plantilla
+def convert_md_to_html(md_file, html_file, template_file="templates/base.html"):
     with open(md_file, 'r', encoding='utf-8') as f:
         md_content = f.read()
     
     html_content = markdown.markdown(md_content, extensions=['tables', 'fenced_code'])
     
-    # Agregar estructura HTML básica
-    html_full = f"""
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Curso de Django - Lección</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <link rel="stylesheet" href="../css/styles.css">
-        <style>
-            .lesson-content {{
-                max-width: 800px;
-                margin: 0 auto;
-                padding: 2rem;
-                background: white;
-                border-radius: 8px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            }}
-            .lesson-content h1, .lesson-content h2, .lesson-content h3 {{
-                color: #667eea;
-            }}
-            .lesson-content a {{
-                color: #667eea;
-                text-decoration: none;
-            }}
-            .lesson-content a:hover {{
-                text-decoration: underline;
-            }}
-            .lesson-content pre {{
-                background: #f5f5f5;
-                padding: 1rem;
-                border-radius: 4px;
-                overflow-x: auto;
-            }}
-            .lesson-content code {{
-                background: #f5f5f5;
-                padding: 0.2rem 0.4rem;
-                border-radius: 4px;
-            }}
-        </style>
-    </head>
-    <body>
-        <header>
-            <img src="https://www.djangoproject.com/m/img/logos/django-logo-negative.png" alt="Django Logo" class="django-logo">
-            <h1>Curso de Django 🚀</h1>
-            <p>Aprende Django desde cero con Iroennys Dev</p>
-        </header>
-        <div class="container">
-            <div class="lesson-content">
-                {html_content}
+    # Usar plantilla base si existe
+    if os.path.exists(template_file):
+        with open(template_file, 'r', encoding='utf-8') as f:
+            template = f.read()
+        html_full = template.replace('{% block content %}{% endblock %}', html_content)
+    else:
+        # Plantilla básica si no existe
+        html_full = f"""
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Curso de Django - Lección</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+            <link rel="stylesheet" href="/static/css/styles.css">
+        </head>
+        <body>
+            <div class="container py-5">
+                <div class="lesson-content">
+                    {html_content}
+                </div>
             </div>
-        </div>
-        <footer>
-            <p>Creador: <a href="https://github.com/iroennys-admin" target="_blank">Iroennys Dev</a> | © 2023 Curso de Django</p>
-        </footer>
-    </body>
-    </html>
-    """
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        </body>
+        </html>
+        """
     
     with open(html_file, 'w', encoding='utf-8') as f:
         f.write(html_full)
 
-# Recorrer las lecciones y convertir cada README.md
+# Convertir lecciones individuales
 def convert_lessons():
-    for lesson_dir in os.listdir(LESSONS_DIR):
+    for lesson_dir in sorted(os.listdir(LESSONS_DIR)):
         lesson_path = os.path.join(LESSONS_DIR, lesson_dir)
         if os.path.isdir(lesson_path):
             md_file = os.path.join(lesson_path, "README.md")
@@ -92,5 +63,12 @@ def convert_lessons():
                 convert_md_to_html(md_file, html_file)
                 print(f"Convertido: {md_file} -> {html_file}")
 
+# Convertir página principal
+def convert_index():
+    if os.path.exists("curso_django.md"):
+        convert_md_to_html("curso_django.md", os.path.join(DOCS_DIR, "index.html"), "templates/index.html")
+        print(f"Convertido: curso_django.md -> docs/index.html")
+
 if __name__ == "__main__":
+    convert_index()
     convert_lessons()
